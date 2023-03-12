@@ -5,6 +5,6 @@ Resources:
       Properties:        
         TaskDefinition: "arn:aws:ecs:us-east-1:361494667617:task-definition/pokerhandanalyzerapi:1"
         LoadBalancerInfo:
-          ContainerName: "pokerhandanalyzerap-claudio" 
+          ContainerName: "pokerhandanalyzerap" 
           ContainerPort: "8080"
         PlatformVersion: "LATEST"
