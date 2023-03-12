@@ -52,7 +52,7 @@ public class PokerHandService {
 		pokerHandAnalysis = validatePokerHand(pokerHand);
 		if (pokerHandAnalysis.getStatus().equals(PokerHandAnalysis.VALID_HAND)) {
 			if (isStraight(pokerHand)) {
-				pokerHandAnalysis.setMessage("It is a straight!");
+				pokerHandAnalysis.setMessage("It is a straight, lucky you man!");
 			} else {
 				pokerHandAnalysis.setMessage("It is NOT a straight!");
 			}
