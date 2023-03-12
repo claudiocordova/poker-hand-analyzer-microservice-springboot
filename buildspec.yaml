@@ -5,7 +5,7 @@ phases:
       java: corretto17
   pre_build:
     commands:
-    - echo Logging in to Amazon ECR...
+    - echo Logging in to Amazon ECR....
     - aws --version
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 361494667617.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com 
     - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"

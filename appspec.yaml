@@ -2,9 +2,9 @@ version: 1.0
 Resources:
   - TargetService:
       Type: AWS::ECS::Service
-      Properties:
+      Properties:        
         TaskDefinition: "arn:aws:ecs:us-east-1:361494667617:task-definition/pokerhandanalyzerapi:1"
         LoadBalancerInfo:
-          ContainerName: "pokerhandanalyzerapi"
+          ContainerName: "pokerhandanalyzerapi" 
           ContainerPort: "8080"
         PlatformVersion: "LATEST"
