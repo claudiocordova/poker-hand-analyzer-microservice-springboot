@@ -25,5 +25,10 @@ public class PokerHandController {
 		return pokerHandService.submitPokerHand(pokerHand);
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value ="/health")
+	public String health() {
+		return "ok";
+	}
+	
 	
 }
