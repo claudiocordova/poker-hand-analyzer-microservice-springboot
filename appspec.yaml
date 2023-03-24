@@ -3,7 +3,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:        
-        TaskDefinition: "arn:aws:ecs:us-east-1:361494667617:task-definition/pokerhandanalyzerapi:1"
+        TaskDefinition: "arn:aws:ecs:us-east-1:361494667617:task-definition/pokerhandanalyzerapi:6"
         LoadBalancerInfo:
           ContainerName: "pokerhandanalyzerapi" 
           ContainerPort: "8080"
