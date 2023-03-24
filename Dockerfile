@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM amazoncorretto:8
 VOLUME /tmp
 EXPOSE 8080
 ADD target/*.jar app.jar
