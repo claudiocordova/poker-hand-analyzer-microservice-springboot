@@ -30,5 +30,13 @@ public class PokerHandController {
 		return "ok";
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value ="/test")
+	public PokerHandAnalysis test() {
+		PokerHandAnalysis r = new PokerHandAnalysis("1","hello");
+		return r;
+	}
+	
+	
+	
 	
 }
