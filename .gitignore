@@ -12,6 +12,7 @@ node_modules
 /.idea
 .project
 .classpath
+git-commands.sh
 .c9/
 *.launch
 .settings/
