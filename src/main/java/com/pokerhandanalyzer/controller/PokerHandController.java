@@ -32,7 +32,7 @@ public class PokerHandController {
 	
 	@RequestMapping(method=RequestMethod.GET, value ="/test")
 	public PokerHandAnalysis test() {
-		PokerHandAnalysis r = new PokerHandAnalysis("1","hello V6");
+		PokerHandAnalysis r = new PokerHandAnalysis("1","hello V7");
 		return r;
 	}
 	
