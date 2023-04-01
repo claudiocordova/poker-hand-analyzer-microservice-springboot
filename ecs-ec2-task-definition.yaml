@@ -35,9 +35,9 @@ Resources:
             Family: "poker-analyzer-service-task-definition"
             TaskRoleArn: !GetAtt IAMRole.Arn
             ExecutionRoleArn: !GetAtt IAMRole.Arn
-            NetworkMode: "awsvpc"
+            NetworkMode: "host"
             RequiresCompatibilities: 
-              - "FARGATE"
+              - "EC2"
             Cpu: "256"
             Memory: "512"
     IAMRole:
