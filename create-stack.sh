@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 
 if [ -z "$1" ]; then
@@ -27,6 +27,17 @@ rm appspec.yaml
 aws cloudformation delete-stack --region $REGION --stack-name ecs-ecr-repository-stack
 aws cloudformation wait stack-delete-complete --region $REGION --stack-name ecs-ecr-repository-stack
 aws cloudformation create-stack --region $REGION --stack-name ecs-ecr-repository-stack --template-body file://./ecs-ecr-repository.yaml  --parameters ParameterKey=RepositoryName,ParameterValue=poker-analyzer-service-repository --capabilities CAPABILITY_NAMED_IAM
+result=$?
+
+if [ $result -eq 254 ] || [ $result -eq 255 ]; then
+  echo "ecs-ecr-repository-stack already exists"
+  #exit 0
+elif [ $result -ne 0 ]; then
+  echo "ecs-ecr-repository-stack failed to create " $result
+  exit 1
+fi
+
+
 aws cloudformation wait stack-create-complete --region $REGION --stack-name ecs-ecr-repository-stack
 repositoryUri=$(aws cloudformation describe-stacks --region $REGION --stack-name ecs-ecr-repository-stack | jq -r '.Stacks[0].Outputs[0].OutputValue')
 
@@ -45,8 +56,20 @@ docker push $repositoryUri:0.0.1-SNAPSHOT
 aws cloudformation delete-stack --region $REGION --stack-name ecs-task-definition-stack
 aws cloudformation wait stack-delete-complete --region $REGION --stack-name ecs-task-definition-stack
 if [ "$MODE" == "FARGATE" ]; then
-  aws cloudformation create-stack --region $REGION --stack-name ecs-task-definition-stack --template-body file://./ecs-task-definition.yaml --parameters ParameterKey=Image,ParameterValue=$repositoryUri:0.0.1-SNAPSHOT   --capabilities CAPABILITY_NAMED_IAM
+  aws cloudformation create-stack --region $REGION --stack-name ecs-task-definition-stack --template-body file://./ecs-fargate-task-definition.yaml --parameters ParameterKey=Image,ParameterValue=$repositoryUri:0.0.1-SNAPSHOT   --capabilities CAPABILITY_NAMED_IAM
 elif [ "$MODE" == "EC2" ]; then
   aws cloudformation create-stack --region $REGION --stack-name ecs-task-definition-stack --template-body file://./ecs-ec2-task-definition.yaml --parameters ParameterKey=Image,ParameterValue=$repositoryUri:0.0.1-SNAPSHOT   --capabilities CAPABILITY_NAMED_IAM
 fi
+
+result=$?
+
+if [ $result -eq 254 ] || [ $result -eq 255 ]; then
+  echo "ecs-task-definition-stack already exists"
+  #exit 0
+elif [ $result -ne 0 ]; then
+  echo "ecs-task-definition-stack failed to create " $result
+  exit 1
+fi
+
+
 aws cloudformation wait stack-create-complete --region $REGION --stack-name ecs-task-definition-stack

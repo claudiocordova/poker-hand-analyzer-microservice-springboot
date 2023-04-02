@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 TASK_DEFINITION_ARN=$1
 CONTAINER_NAME=$2
 
