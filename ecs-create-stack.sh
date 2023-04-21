@@ -3,14 +3,20 @@
 
 if [ -z "$1" ]; then
       MODE=FARGATE
-elif [ "$1" == "EC2" ]; then
+elif [ "$1" == "ECS_EC2" ]; then
       MODE=$1
-elif [ "$1" == "FARGATE" ]; then
+elif [ "$1" == "ECS_FARGATE" ]; then
       MODE=$1
 else
     echo "Wrong parameter 1 MODE: "$1
     exit 1 
 fi
+
+
+docker --version
+docker-compose --version
+#brew install docker-machine docker
+docker-machine --version
 
 
 accounId=$(aws sts get-caller-identity --query Account --output text)
@@ -19,14 +25,18 @@ taskDefinitionArn="arn:aws:ecs:$REGION:$accounId:task-definition/poker-analyzer-
 containerName="poker-analyzer-service-container"
 
 ./generate_appspec_yaml.sh $taskDefinitionArn $containerName
-aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin 361494667617.dkr.ecr.us-east-1.amazonaws.com/amazoncorretto:8  
+aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin 361494667617.dkr.ecr.us-west-2.amazonaws.com/amazoncorretto
+cp ecs-buildspec.yaml buildspec.yaml
+
 mvn clean package
+
 rm appspec.yaml
+rm buildspec.yaml
 
 
 aws cloudformation delete-stack --region $REGION --stack-name ecs-ecr-repository-stack
 aws cloudformation wait stack-delete-complete --region $REGION --stack-name ecs-ecr-repository-stack
-aws cloudformation create-stack --region $REGION --stack-name ecs-ecr-repository-stack --template-body file://./ecs-ecr-repository.yaml  --parameters ParameterKey=RepositoryName,ParameterValue=poker-analyzer-service-repository --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --region $REGION --stack-name ecs-ecr-repository-stack --template-body file://./ecr-repository.yaml  --parameters ParameterKey=RepositoryName,ParameterValue=poker-analyzer-service-repository --capabilities CAPABILITY_NAMED_IAM
 result=$?
 
 if [ $result -eq 254 ] || [ $result -eq 255 ]; then
