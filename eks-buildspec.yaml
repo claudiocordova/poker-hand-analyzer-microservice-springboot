@@ -14,7 +14,9 @@ phases:
         - echo $TAG
         - echo $REPOSITORY_URI
         - echo $REPOSITORY_URI:$TAG
+        - cat eks-nodeport-service-deployment.yaml
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' eks-nodeport-service-deployment.yaml
+        - cat eks-nodeport-service-deployment.yaml
         - $(aws ecr get-login --no-include-email)
         - export KUBECONFIG=$HOME/.kube/config
   build:
@@ -30,6 +32,7 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+      - cat eks-nodeport-service-deployment.yaml      
       - kubectl apply -f eks-nodeport-service-deployment.yaml
       - printf '[{"name":"claudio-deployment","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
 artifacts:
