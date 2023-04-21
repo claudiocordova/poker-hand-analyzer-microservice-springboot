@@ -21,7 +21,6 @@ phases:
     commands:
       - mvn clean package -Ddockerfile.skip    
       - docker build -t $REPOSITORY_URI:$TAG .
-
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$TAG
