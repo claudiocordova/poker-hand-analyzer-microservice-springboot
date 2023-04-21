@@ -21,12 +21,11 @@ containerName="poker-analyzer-service-container"
 
 
 aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin 361494667617.dkr.ecr.us-west-2.amazonaws.com/amazoncorretto
-cp eks-buildspec.yaml buildspec.yaml
+
 
 mvn clean package
 
-#rm appspec.yaml
-#rm buildspec.yaml
+
 
 
 aws cloudformation delete-stack --region $REGION --stack-name eks-ecr-repository-stack
@@ -47,11 +46,6 @@ repositoryUri=$(aws cloudformation describe-stacks --region $REGION --stack-name
 
 
 echo $repositoryUri
-
-# Delete ECR Repository
-#aws ecr delete-repository --force --repository-name poker-analyzer-service --region $region
-# Create ECR Repository
-#repositoryUri=$(aws ecr create-repository --repository-name poker-analyzer-service --region $region | jq -r '.repository.repositoryUri')
 
 
 aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $repositoryUri
