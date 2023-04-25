@@ -2,7 +2,7 @@
 
 
 if [ -z "$1" ]; then
-      MODE=FARGATE
+      MODE=ECS_FARGATE
 elif [ "$1" == "ECS_EC2" ]; then
       MODE=$1
 elif [ "$1" == "ECS_FARGATE" ]; then
@@ -65,9 +65,9 @@ docker push $repositoryUri:0.0.1-SNAPSHOT
 
 aws cloudformation delete-stack --region $REGION --stack-name ecs-task-definition-stack
 aws cloudformation wait stack-delete-complete --region $REGION --stack-name ecs-task-definition-stack
-if [ "$MODE" == "FARGATE" ]; then
+if [ "$MODE" == "ECS_FARGATE" ]; then
   aws cloudformation create-stack --region $REGION --stack-name ecs-task-definition-stack --template-body file://./ecs-fargate-task-definition.yaml --parameters ParameterKey=Image,ParameterValue=$repositoryUri:0.0.1-SNAPSHOT   --capabilities CAPABILITY_NAMED_IAM
-elif [ "$MODE" == "EC2" ]; then
+elif [ "$MODE" == "ECS_EC2" ]; then
   aws cloudformation create-stack --region $REGION --stack-name ecs-task-definition-stack --template-body file://./ecs-ec2-task-definition.yaml --parameters ParameterKey=Image,ParameterValue=$repositoryUri:0.0.1-SNAPSHOT   --capabilities CAPABILITY_NAMED_IAM
 fi
 

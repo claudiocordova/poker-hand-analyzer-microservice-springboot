@@ -1,15 +1,18 @@
 package com.pokerhandanalyzer.service;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.pokerhandanalyzer.model.Card;
 import com.pokerhandanalyzer.model.PokerHandAnalysis;
 
 @Service
+@XRayEnabled
 public class PokerHandService {
 
 	private enum Value {
@@ -62,6 +65,10 @@ public class PokerHandService {
 			return pokerHandAnalysis;
 		}
 
+	}
+	
+	public String health() {
+		return "ok from service";
 	}
 
 	/*
@@ -193,5 +200,7 @@ public class PokerHandService {
 		}
 		return result;
 	}
+
+
 
 }

@@ -32,14 +32,29 @@ Resources:
                     ContainerPort: 8080
                     HostPort: 8080
                     Protocol: "tcp"
+              - 
+                Essential: true
+                Image: "public.ecr.aws/xray/aws-xray-daemon:3.3.7"
+                LogConfiguration: 
+                    LogDriver: "awslogs"
+                    Options: 
+                        awslogs-group: "/ecs/poker-analyzer-service"
+                        awslogs-region: !Ref AWS::Region
+                        awslogs-stream-prefix: "ecs"
+                Name: "xray-daemon"
+                PortMappings: 
+                  - 
+                    ContainerPort: 2000
+                    HostPort: 2000
+                    Protocol: "udp"                    
             Family: "poker-analyzer-service-task-definition"
             TaskRoleArn: !GetAtt IAMRole.Arn
             ExecutionRoleArn: !GetAtt IAMRole.Arn
             NetworkMode: "awsvpc"
             RequiresCompatibilities: 
               - "FARGATE"
-            Cpu: "256"
-            Memory: "512"
+            Cpu: "512"
+            Memory: "1024"
     IAMRole:
         Type: "AWS::IAM::Role"
         Properties:
